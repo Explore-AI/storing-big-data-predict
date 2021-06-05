@@ -418,7 +418,7 @@ If this command returns no output, then it should have executed successfully. Yo
 ls /nfs_source/Individual_Stocks/
 ```
 <p align="center">
-  <img src="figs/9_test_data_transfer/files_in_nfs_source.png" 
+  <img src="figs/files_in_nfs_source.png" 
        alt="CSV files transferred onto the NFS-based file share."
        width="800px"/>
     <br>
