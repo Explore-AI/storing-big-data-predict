@@ -1,0 +1,102 @@
+AWSTemplateFormatVersion: 2010-09-09
+Metadata:
+  'AWS::CloudFormation::Interface':
+    ParameterGroups:
+      - Label:
+          default: Extract Predict Part 1 - File Server resource deployment
+        Parameters:
+          - VPC
+          - Subnet
+          - KeyName
+          - SecurityGroupIds
+          - LatestLinuxAmiId
+Parameters:
+  VPC:
+    Description: VPC to deploy resources into.
+    Type: 'AWS::EC2::VPC::Id'
+  Subnet:
+    Description: Subnet to deploy resources into.
+    Type: 'AWS::EC2::Subnet::Id'
+  SecurityGroupIds:
+    Description: Specify the security group/s for resources.
+    Type: 'List<AWS::EC2::SecurityGroup::Id>'
+  KeyName:
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the file server.
+    Type: 'AWS::EC2::KeyPair::KeyName'
+    ConstraintDescription: Must be the name of an existing EC2 KeyPair.
+  LatestLinuxAmiId:
+    Description: Do Not modify the below default value!
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
+Resources:
+  LinuxInstance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      ImageId: !Ref LatestLinuxAmiId
+      KeyName: !Ref KeyName
+      InstanceType: t2.micro
+      IamInstanceProfile: !Ref s3ROInstanceProfile
+      SecurityGroupIds: !Ref SecurityGroupIds
+      SubnetId: !Ref Subnet
+      Tags:
+        - Key: Name
+          Value: DE-Extract-Linux-Instance
+      UserData: !Base64
+        'Fn::Join':
+          - ''
+          - - |
+              #!/bin/bash
+            - |
+              yum install -y aws-cfn-bootstrap
+            - |
+              sudo su
+            - |
+              mkdir /temp
+            - |
+              aws s3 sync s3://de-extract-predict-payload/Pre_Script /temp
+            - |
+              chmod 755 /temp/prescript.sh
+            - |
+              cd /temp
+            - |
+              ./prescript.sh
+            - |
+              rm prescript.sh
+  s3ROInstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      Path: /
+      Roles:
+        - !Ref s3ROrole
+  s3ROAccessPolicy:
+    Type: 'AWS::IAM::Policy'
+    Properties:
+      PolicyName: s3ROAccessPolicy
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Action:
+              - 's3:Get*'
+              - 's3:List*'
+            Resource: '*'
+      Roles:
+        - !Ref s3ROrole
+  s3ROrole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+Outputs:
+  LinuxInstance:
+    Description: Private IP address of the newly created File server EC2 instance
+    Value: !GetAtt
+      - LinuxInstance
+      - PrivateIp
