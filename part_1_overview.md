@@ -279,7 +279,7 @@ In the original on-premise source connection setup scenario, the team could only
 To connect to this instance, you'll need to make use of a Remote Desktop Protocol (RDP) client, along with the EC2 key pair you configured in [Step 1, action 4](#step-1-establishing-prerequisites). Following this procedure should give you access to a live session on the Windows instance, wherein the desktop and Windows GUI can be seen. 
 
 <p align="center">
-  <img src="figs/3_connect_to_on_prem_vm/EC2_Windows_instance.png" 
+  <img src="figs/EC2_Windows_instance.png" 
        alt="Screenshot of the configured Windows EC2 instance."
        width="700px"/>
     <br>
@@ -361,7 +361,7 @@ You'll now need to connect to the remote file server of the organisation (Linux 
 
 
 <p align="center">
-  <img src="figs/7_mount_&_connect_shares/NFS-mount-success.png" 
+  <img src="figs/NFS-mount-success.png" 
        alt="Terminal output showing successful mounting of the NFS file share."
        width="1100px"/>
     <br>
