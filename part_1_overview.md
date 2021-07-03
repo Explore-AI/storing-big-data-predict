@@ -288,7 +288,7 @@ To connect to this instance, you'll need to make use of a Remote Desktop Protoco
 
 |    🚩 **Student Instructions** 🚩    |
 | ------------------------------------ |
-|  Navigate to the EC2 dashboard within the AWS management console and ensure that you can use provided instructions to log into the remote Windows instance. Note that the visual appearance of your instance's desktop may not exactly match the example screenshot provided.|
+|  Navigate to the EC2 dashboard within the AWS management console and ensure that you can use AWS's provided instructions to log into the remote Windows instance. Note that the visual appearance of your instance's desktop may not exactly match the example screenshot provided.|
 
 **3.2) Create an S3 File Gateway Resource Bucket**
 
@@ -296,7 +296,7 @@ Your boss informs you that you'll need to create an S3-backed file gateway for t
 
 |    🚩 **Student Instructions** 🚩    |
 | ------------------------------------ |
-|  As per instructions given above, create a new S3 bucket to be used with the file gateway. Ensure that this bucket is not publicly accessible. Follow the resource naming convention to give the bucket a unique name, ending with *"-source-file-gateway"*. Note that S3 enforces all bucket names to be written in lower case e.g. *"dedorexp-source-file-gateway*. Record this bucket name for later use. |
+|  As per instructions given above, create a new S3 bucket to be used with the file gateway. Ensure that this bucket is not publicly accessible. The S3 service enforces all bucket names to be written in lower case, and to be globally unique. As such, extending the predict resource naming convention, use *'de{full-first-name}{full-last-name}-source-file-gateway'* as the unique name of your S3 bucket. For example, *'dedoraexplorer-source-file-gateway'*. Record this bucket name for later use. |
 
 **3.3) Configure and Deploy an AWS File Gateway**
 
@@ -380,7 +380,7 @@ Having mounted the NFS file share onto the Linux instance file server, your boss
 Some implementation details here include:
  - Configure the alarm using the AWS Cloudwatch alarm creation page (*"Cloudwatch"* > *"Alarms"* > *"Create alarm"*).
  - When prompted to choose an appropriate metric for the alarm, search for and select the *'Storage Gateway > File Share Metrics'* grouping.
- - Select the *'WriteBytes'* metric corresponding with your configured file gateway listed under *'GatewayName'*.
+ - Select the *'CloudBytesUploaded'* metric corresponding with your configured file gateway.
    - For this selected metric, set its *'Statistic'* to be calculated as a *'Sum'* over a *1 minute* period. 
    - Set a value of `50'000` (50 KB) to be the threshold value for the metric. 
  - As a form of notification whenever the alarm is raised, choose to send a message via a newly created SNS topic.
