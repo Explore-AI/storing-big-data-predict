@@ -58,7 +58,20 @@ The resources below are provided in order to help complete this task:
 The following actions need to be taken in order to complete the assessments used within the second task for the predict: 
  - [ ] **Stream ~5min of synthetic data through your data pipeline into your S3 bucket** 
  - [ ] **Generate custom pipeline failure SNS alert email** 
- - [ ] **Complete Task 2 MCQ**
+ - [ ] **Complete Task 2 MCQ**  
+
+
+## Athena Upload
+You need to upload a zip folder to Athena.   
+Here is what is expected inside of the zip folder uploaded by a student named Dora Explorer.    
+1. Dora-Explorer-VPC.yml   
+2. Dora-Explorer-Windows-Instance.yml   
+3. Dora-Explorer-Architecture-Diagram.png   
+4. Dora-Explorer.csv (see below for example)  
+
+| Name | Surname | File Gateway S3 Bucket Name | Fileshare Alert SNS Topic ARN | Delivery Stream S3 Bucket Name | Streaming SNS Topic ARN |
+|--- |--- |--- |--- |--- |--- |
+| Dora | Explorer | dedoraexplorer-source-file-gateway | arn:aws:sns:region:123456789:DEDOREXP-Fileshare-transfer-alert | dedoraexplorer-deliverystream-s3 | arn:aws:sns:region:123456789:DEDOREXP-streaming-sns-topic |
 
 ## FAQ ❓
 
