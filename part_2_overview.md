@@ -16,46 +16,9 @@ Just as was the case in the first task, your boss advises you that there are som
 
 3. **Conform to an appropriate naming convention**: Again, as a means to easily see your deployed resources in this task, your boss asks you to use the same naming convention used in task 1. Here, each service resource you configure should be named: **"DE{first 3 letters of your name capitalised}{first 3 letters of your surname capitalised}-{name of service}"**. For example, when configuring a streaming lambda, and having the name *"Dora Explorer"*, the applied service name would be *"DEDOREXP-streaming-lambda"*.   
 
-### Step 2: Drawing an Architectural Diagram
+### Step 2: Setting Up a Streaming Source
 
-With her confidence increasing in your abilities, your boss mentions that she's going to provide you with more autonomy during this task. This means that you'll have more freedom in choosing how to configure your pipeline. Unfortunately it also means that you'll have to think more carefully around how you will accomplish the task with less guidance. To ensure that you don't get too lost, however, a request is made for you to first draw up an architectural diagram of the system you intend to implement. 
-
-In creating this diagram, you'll need to consider both the type, and the level of detail that will be most appropriate for your task. Always wanting to give a little nudge, your boss requests that you make use of the following AWS services in order to create your application: 
-
-- AWS Kinesis Firehose
-- AWS DynamoDB
-- AWS S3
-- AWS Lambda
-- AWS Simple Notification Service
-- AWS Cloudwatch Events
-
-In addition to this list, you're also given the following base architecture which you're told should be expanded upon to form your architectural diagram.
-
-<p align='center'>
-     <img src="figs/streaming_archittecture.jpg"
-     alt='Baseline streaming architecture'
-     width=900px/>
-     <br>
-     <em>Figure 1:  Baseline architecture diagram offered by your boss.</em>
-</p>
-
-Using a combination of the given list, as well as the base diagram, determine the services that will need to be included in your figure. Ensure that you link services together in a logical flow. For example, it may help starting with concepts such as `streaming generator`, `database`, and `alerting service`, and then expanding to specific AWS services thereafter. 
-
-As a final note, your boss mentions how putting effort into this step will help guide your actions in formulating the rest of your pipeline. Eager to learn from her example, you gather your thoughts and start designing. 
-
-
-|    🚩 **Student Instructions** 🚩    |
-| ------------------------------------ |
-| Use the provided AWS services list and base architecture diagram to create your own architecture diagram for the streaming pipeline required for this predict task. Follow the guidance provided in this section by choosing the type and level of detail for the diagram.|
-
-|      ⏱ **Assessment Time** ⏱       |
-| ------------------------------------ |
-|  As part of this task's deliverables, you'll be required to submit your designed architectural diagram to EDSA. As was the case for the YAML templates in the first task, you will receive further instruction on how to submit your diagram file via the regular communication channels. While this diagram won't be directly assessed, the concepts used in its formation will be tested in the end-of-task MCQ that you'll need to complete.|
-
-
-### Step 3: Setting Up a Streaming Source
-
-Having drawn-up your architecture diagram, you now turn your attention to a fundamental component of the system: the stream source/generator. After thinking about it for a little bit, your boss remembers that she may actually have an old script that can help you out here. This script, provided [here](code/part2/student_streaming_lambda.py), was previously used by her to simulate ticker data being fetched from financial APIs monitoring stock market movements. With a bit of effort, she believes that you can update this script and utilise it as part of your workflow - taking the form of an AWS Lambda function which is triggered at regular intervals to form a stream of ticker data.  
+Having taken carefull consideration on how the infrastructure should be set up, you now turn your attention to a fundamental component of the system: the stream source/generator. After thinking about it for a little bit, your boss remembers that she may actually have an old script that can help you out here. This script, provided [here](code/part2/student_streaming_lambda.py), was previously used by her to simulate ticker data being fetched from financial APIs monitoring stock market movements. With a bit of effort, she believes that you can update this script and utilise it as part of your workflow - taking the form of an AWS Lambda function which is triggered at regular intervals to form a stream of ticker data.  
 
 As you study the provided script more carefully, you begin to see how it works. It appears that the script reads from a specified table within the DynamoDB service of AWS, and extracts values associated with five fetched indexes. These index values are randomly updated by a small amount, and are again then written back into the DynamoDB table, ready to repeat the process over again. Based-off your intuition, you realise that the DynamoDB table must have had the following item structure:
 
@@ -104,7 +67,7 @@ Once you've performed these actions, you should be able to run your lambda manua
 | Complete actions 1-3 as outlined above, taking especial note of the naming convention required if specified. You should be able to see the values of the DynamoDB table update before moving on to the next step within the task.| 
 
 
-### Step 4: Configuring a Lambda Trigger
+### Step 3: Configuring a Lambda Trigger
 
 It feels great to have your lambda function run and generate new data that can simulate a data stream. Unfortunately, executing this script manually on a continual basis just isn't practical. For this reason, you realise that you need to configure a trigger for lambda which will run it on a periodic basis. 
 
@@ -116,7 +79,7 @@ Your boss approves of this idea, suggesting that you use the AWS CloudWatch serv
 | As indicated above, you'll now need to configure a CloudWatch-based trigger that will run your lambda data generation function every 60 seconds.                      |
 
 
-### Step 5: Add Alerts for Lambda Failures
+### Step 4: Add Alerts for Lambda Failures
 
 One of the central principles in data engineering is observability. Citing this, your boss indicates that you'll need to equip your growing pipeline with some monitoring functionality. As a first step, she suggests that you create an AWS SNS notification that sends a custom email to one or more email addresses whenever the configured lambda-based script stops functioning correctly. 
 
@@ -134,7 +97,7 @@ To put this notification solution in place, you determine that you'll need to co
 | ------------------------------------ |
 | As before, complete actions 1-3 in order to finish this step. Importantly, you'll need to ensure that you register the `edsa.predicts@explore-ai.net` email address as an email recipient, along with your personal email address, when configuring the SNS topic as part of action 1. |
 
-### Step 6: Connect AWS Kinesis Firehose to Streaming Service
+### Step 5: Connect AWS Kinesis Firehose to Streaming Service
 
 With your notification lambda set up, you now have only one major component of your streaming pipeline to configure - the streaming application itself! The role of this application is to receive data streamed from a source, and to transfer this in a reliant manner to a down-stream storage destination. 
 
@@ -158,7 +121,7 @@ With these actions outlined, you set off to build out the last components of you
 | ------------------------------------ |
 |  It's vital that you follow the prompt in action 2 to *make your destination S3 bucket publicly accessible*. We will use automated means to read your bucket, and to assign assessment marks based on its discovered content. |
 
-### Step 7: Test your Streaming Pipeline
+### Step 6: Test your Streaming Pipeline
 
 It's finally done! With a last couple of keystrokes, you deploy the updates made to your streaming lambda - enabling it to push data through to Kinesis Firehose and subsequently your S3 bucket. You eagerly navigate to your S3 bucket and inspect its contents. As expected, you now have a growing collection of ticker data which grows every minute as the streaming lambda is triggered. 
 
@@ -175,6 +138,40 @@ Seeing this, your boss walks over to give you a big high-five. You've done a fan
 |      ⏱ **Assessment Time** ⏱       |
 | ------------------------------------ |
 |  With this final step completed, you are now ready to undertake the Part-2 MCQ of the predict. This MCQ will assess multiple concepts that have been covered in the above steps, and as such focus should be placed on understanding the processes which have been followed, and not only their outcomes. |
+
+### Step 7: Drawing an Architectural Diagram
+
+Create an architecture diagram that will communicate to your boss how the cloud infrastructure is setup.   
+In creating this diagram, you'll need to consider both the type, and the level of detail that will be most appropriate. Ensure to mention the AWS services used which include the following: 
+
+- AWS Kinesis Firehose
+- AWS DynamoDB
+- AWS S3
+- AWS Lambda
+- AWS Simple Notification Service
+- AWS Cloudwatch Events
+
+In addition to this list, you're also given the following base architecture which you're told should be expanded upon to form your architectural diagram.
+
+<p align='center'>
+     <img src="figs/streaming_archittecture.jpg"
+     alt='Baseline streaming architecture'
+     width=900px/>
+     <br>
+     <em>Figure 1:  Baseline architecture diagram offered by your boss.</em>
+</p>
+
+Using a combination of the given list, as well as the base diagram, determine the services that will need to be included in your figure. Ensure that you link services together in a logical flow. For example, it may help starting with concepts such as `streaming generator`, `database`, and `alerting service`, and then expanding to specific AWS services thereafter. 
+
+
+|    🚩 **Student Instructions** 🚩    |
+| ------------------------------------ |
+| Use the provided AWS services list and base architecture diagram to create your own architecture diagram for the streaming pipeline required for this predict task. Follow the guidance provided in this section by choosing the type and level of detail for the diagram.|
+
+|      ⏱ **Assessment Time** ⏱       |
+| ------------------------------------ |
+|  As part of this task's deliverables, you'll be required to submit your designed architectural diagram to EDSA. As was the case for the YAML templates in the first task, you will receive further instruction on how to submit your diagram file via the regular communication channels. While this diagram won't be directly assessed, the concepts used in its formation will be tested in the end-of-task MCQ that you'll need to complete.|
+
 
 ### Step 8: Environment Teardown
 
