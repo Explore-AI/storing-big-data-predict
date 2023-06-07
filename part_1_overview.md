@@ -442,9 +442,17 @@ If the output of this command is a long list of various `.csv` files, then the t
 
 ### Step 7: Tearing Everything Down  
 
-All good things must come to an end. Well, almost an end; your boss reminds you that once you've completed the tear-down process for the source connection scenario, she has a second, streaming-based scenario for you to tackle. But before this can happen, you need to do your chores and tidy up the resources you've created thus far. 
+|    🚩 **Before Tear Down** 🚩    |
+| ------------------------------------ |
+1 - Wait for marking to be completed before starting the teardown process.  
+2 - Any running resources can be stopped to save costs. 
+3 - Resource tearmination must only be done after marking has been completed.
+4 - Your head teacher will let you when it is safe for you do start the tear down process. 
 
-To help you be thorough, your boss provides a checklist of services which will need to be terminated as part of the clean-up process: 
+|    🚩 **Tear Down** 🚩    |
+| ------------------------------------ |
+
+Here is a checklist of services which will need to be terminated as part of the clean-up process: 
 
 **CloudFormation**: The stacks created in [Step 2](#step-2-provisioning-infrastructure) can be deleted navigating to the Stack dashboard (*'CloudFormation'* > *'Stacks'*), selecting your stack, and clicking on *'Delete'*. This action will delete all the associated infrastructure setup in the stack deployment. Stacks to delete:  
  - [ ] VPC stack

@@ -175,9 +175,14 @@ Using a combination of the given list, as well as the base diagram, determine th
 
 ### Step 8: Environment Teardown
 
-With the second task being a tremendous success again, your boss and the team unanimously agree that they're taking you out to dinner! Before you leave the office, however, you need to delete the resources you've set up. This, after all, is another great habit to form as a data engineer. 
+|    🚩 **Before Tear Down** 🚩    |
+| ------------------------------------ |
+1 - Wait for marking to be completed before starting the teardown process.  
+2 - Any running resources can be stopped to save costs. 
+3 - Resource tearmination must only be done after marking has been completed.
+4 - Your head teacher will let you when it is safe for you do start the tear down process. 
 
-|    🚩 **Student Instructions** 🚩    |
+|    🚩 **Tear Down** 🚩    |
 | ------------------------------------ |
 |  Once you've ensured that your pipeline is working (based on the observations in the previous step), proceed by deleting all of the resources you've configured for task 2 **except your S3 bucket**. Once the automated assessment of this resource has been completed, we'll let you know so that you can safely release this resource as well. |
 
